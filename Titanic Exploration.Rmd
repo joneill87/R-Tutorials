@@ -3,6 +3,9 @@ title: "Graphs Ahoy! Exploring R with the Titanic Dataset"
 output:
   html_document:
     df_print: paged
+  pdf_document: 
+    fig_crop: no
+urlcolor: blue
 ---
 
 &copy; Jack O'Neill, licensed for use under the [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
@@ -26,9 +29,9 @@ First thing's first. We're going to be using the packages *ggplot2* and *lattice
 The first two lines check if the required packages exist and if not, installs them. You don't need to do this when you're writing code for your own machine, but it's good practice if you're sharing your code with others who might not have the required packages
 
 ```{r}
-# require('packageName') returns TRUE if the package has been downloaded on the user's machine
-# and FALSE otherwise. The '!' operator is read as "Not". Essentially, here we're saying "if the
-# require() function returns false, install the package"
+# require('packageName') returns TRUE if the package has been downloaded on the 
+# user's machine and FALSE otherwise. The '!' operator is read as "Not". Essentially, 
+# here we're saying "if the require() function returns false, install the package"
 if (!require('ggplot2')) install.packages('ggplot2')
 if (!require('lattice')) install.packages('lattice')
 
@@ -40,9 +43,11 @@ library(lattice)
 Now that we've got our modules loaded we next want to load our data. We will be using the [Titanic Dataset](https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv). As this data is in comma separated values format (*csv*) we can parse it using *R*'s read.csv() function. Read.csv takes a file location as its first parameter. This can be a path to a file on your computer, but can just as easily be a web address.
 
 ```{r}
-data <- read.csv('https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv')
+data <- read.csv(
+  'https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv'
+  )
 # The line below forces R to output the dataset we just created
-data
+head(data)
 ```
 
 Notice that we now have a variable called `data` in the top right panel of our IDE. If we click the dropdown arrow to the left of the variable name we can see each of the features belonging to this dataset. We can access those features using the `$` operator; e.g. to get only the ages of passengers we can use data$Age
@@ -76,8 +81,10 @@ data$Survived <- as.logical(data$Survived)
 
 # Let's tidy up after ourselves and drop the Survived.logical feature we created
 # earlier. R has a handy trick to do this. We assign the value list(NULL) to a
-# column and R will delete it for us. Note that we're using square bracket notation (rather than
-# the usual $ operator) and passing the column name in as a string. We'll talk more about this in # later classes but for now, just know that these are by-and-large equivalent. 
+# column and R will delete it for us. Note that we're using square bracket notation 
+# (rather than the usual $ operator) and passing the column name in as a string. We'll 
+# talk more about this in # later classes but for now, just know that these are 
+# by-and-large equivalent. 
 # The list(NULL) trick only works with square bracket notation, however.
 data["Survived.logical"] <- list(NULL)
 ```
@@ -173,7 +180,7 @@ Notice the warning message from R in the console. We didn't tell R how wide we w
 
 We could do this manually, by changing the value for binwidth and eyeballing the plot it creates. However, we can automate all of this using a **for** loop.
 
-```{r}
+```{r fig.height=1.75, fig.width=3.5}
 # This for loop is telling R to create this plot with different binwidths.
 # 1:10 is a shorthand way of writing c(1,2,3,4,5,6,7,8,9,10)
 for (binwidth in 1:10) {
@@ -181,7 +188,7 @@ for (binwidth in 1:10) {
   # to draw our plot by using the print() function
   print(ggplot(data, aes(x=Age, fill=Survived)) +
     geom_histogram(binwidth=binwidth) +
-    labs(title=paste("Survival Rate by Age, Binwidth =", binwidth)))
+    labs(title=paste("Survival Rate by Age, Binwidth", binwidth)))
 }
 ```
 
@@ -257,4 +264,4 @@ do so.
 # Conclusion
 In this notebook we looked at how to download and parse a csv dataset, how to clean that dataset and make sure each feature was of the right type, and how to perform some exploratory analysis with the resulting clean data.
 
-A more comprehensive guide, which dives into re-structuring and re-shaping the data to give us more detail for our graphs can be found on a (kaggle titanic notebook)[https://www.kaggle.com/romabash/titanic-data-visualization#3.-Look-at-Survival-Rate-by-Ticket-Class]. This takes even more of a deep-dive into R, but might be worth while for the more adventurous among you!
+A more comprehensive guide, which dives into re-structuring and re-shaping the data to give us more detail for our graphs can be found on a [kaggle titanic notebook](https://www.kaggle.com/romabash/titanic-data-visualization#3.-Look-at-Survival-Rate-by-Ticket-Class). This takes even more of a deep-dive into R, but might be worth while for the more adventurous among you!

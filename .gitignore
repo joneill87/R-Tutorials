@@ -1,3 +1,5 @@
 ./*.pdf
 ./*.html
+./*.r
+./*.R
 .DS_STORE
